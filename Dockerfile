@@ -49,6 +49,4 @@ COPY src/ /var/www/html/
 RUN apt-get remove -y automake autoconf libtool git 
 RUN rm -rf /tmp/*
 
-RUN echo rado
-
 CMD ["apache2-foreground"]

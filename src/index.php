@@ -1,18 +1,30 @@
 <?php
-    	$geoip = array(
-		'client_ip' => getenv('MMDB_ADDR'),
-		'country' => getenv('MM_COUNTRY_CODE'),
-		'country_name' => getenv('MM_COUNTRY_NAME'),
-   		'region' => getenv('MM_REGION_NAME'),
-        	'region_code' => getenv('MM_REGION_CODE'),
-		'city' => getenv('MM_CITY_NAME'),
-		'postal_code' => getenv('MM_POSTAL_CODE'),
-		'latitude' => getenv('MM_LATITUDE'),
-        	'longitude' => getenv('MM_LONGITUDE')
-	);
-	print (json_encode($geoip, JSON_PRETTY_PRINT));
+$xml = simplexml_load_file("http://www.geoplugin.net/xml.gp?ip=".getRealIpAddr());
+echo $xml->geoplugin_countryName ;
 
 
-        echo '<p>Hello World</p>';
+echo "<pre>" ;
+
+foreach ($xml as $key => $value)
+{
+    echo $key , "= " , $value ,  " \n" ;
+}
+
+function getRealIpAddr()
+{
+    if (!empty($_SERVER['HTTP_CLIENT_IP']))   //check ip from share internet
+    {
+      $ip=$_SERVER['HTTP_CLIENT_IP'];
+    }
+    elseif (!empty($_SERVER['HTTP_X_FORWARDED_FOR']))   //to check ip is pass from proxy
+    {
+      $ip=$_SERVER['HTTP_X_FORWARDED_FOR'];
+    }
+    else
+    {
+      $ip=$_SERVER['REMOTE_ADDR'];
+    }
+    return $ip;
+}
 ?>
 
