@@ -1,22 +1,16 @@
-name: This a workflow title 
-on: [push] # When pushing to any branch then run this action
-# Env variable
-env:
-  DOCKER_USER: ${{secrets.DOCKER_USER}}
-  DOCKER_PASSWORD: ${{secrets.DOCKER_PASSWORD}}
-  REPO_NAME: ${{secrets.REPO_NAME}}
+name: publish
+
+on: [push]
+
 jobs:
-  push-image-to-docker-hub:  # job name
-    runs-on: ubuntu-latest  # runner name : (ubuntu latest version) 
+  publish-hello-world-image:
+    runs-on: ubuntu-latest
+
     steps:
-    - uses: actions/checkout@v2 # first action : checkout source code
-    - name: docker login
-      run: | # log into docker hub account
-        docker login -u $DOCKER_USER -p $DOCKER_PASSWORD  
-    - name: Get current date # get the date of the build
-      id: date
-      run: echo "::set-output name=date::$(date +'%Y-%m-%d--%M-%S')"
-    - name: Build the Docker image # push The image to the docker hub
-      run: docker build . --file Dockerfile --tag $DOCKER_USER/$REPO_NAME:${{ steps.date.outputs.date }}
-    - name: Docker Push
-      run: docker push $DOCKER_USER/$REPO_NAME:${{ steps.date.outputs.date }}
+    - uses: actions/checkout@v2
+
+    - name: Build the hello-world Docker image
+      run: |
+        echo $CR_PAT | docker login ghcr.io -u YourAccountOrGHOrgaNameHere --password-stdin
+      env:
+        CR_PAT: ${{ secrets.CR_PAT }}
