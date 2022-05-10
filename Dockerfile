@@ -1,5 +1,7 @@
 FROM php:7.1.11-apache
 
+LABEL org.opencontainers.image.source="https://github.com/radoslav-stefanov/testing"
+
 RUN apt-get update
 
 #installing dependencies
@@ -46,5 +48,7 @@ COPY src/ /var/www/html/
 # Clean up
 RUN apt-get remove -y automake autoconf libtool git 
 RUN rm -rf /tmp/*
+
+RUN echo rado
 
 CMD ["apache2-foreground"]
